@@ -1,44 +1,62 @@
 #include "array.h"
 
 Queue::Queue(){
-	q_size = DEFAULT_SIZE;
-	index = 0;
-	position = 0;
-	data = new int[q_size];
+	_initNode();
 }
 
 Queue::~Queue(){
 }
 
 void Queue::append(int value){
-	if(index >= q_size){
-		throw "Queue is full";
-	}
-	data[index++] = value;
+	_appendNode(value);
 }
 
 Iterator Queue::createIterator(){
-	return Iterator(*this);
+	return Iterator(this);
 }
 
 int Queue::get(){
-	if(position > index){
-		throw "Queue is empty.";
-	}
-	return data[position++];
+	return _popFirstNode();
 }
 
-Iterator::Iterator(Queue & q){
+void Queue::_initNode(){
+	_head = NULL;
+	_current = NULL;
+	_prev = NULL;
+}
+
+void Queue::_appendNode(int val){
+	_current = new struct _Node;
+	_current -> value = val;
+	_current -> next = NULL;
+	if(_head == NULL){
+		_head = _current;
+	} else {
+		_prev -> next = _current;
+	}
+	_prev = _current;
+}
+
+int Queue::_popFirstNode(){
+	int value = _head -> value;
+	struct _Node *tmp = _head->next;
+	delete _head;
+	_head = tmp;
+	return value;
+}
+Iterator::Iterator(Queue * q){
 	_queue = q;
-	pos = 0;
+	_cur = _queue->_head;
 }
 
 Iterator::~Iterator(){
 }
 
 int Iterator::next(){
-	if(pos >= _queue.index){
-		throw "Iteration finished.";
+	if(_cur == NULL){
+		throw "Iteration is over.";
 	}
-	return _queue.data[pos++];
+	int value = _cur->value;
+	_cur = _cur->next;
+	return value;
 }

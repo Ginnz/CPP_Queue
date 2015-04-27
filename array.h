@@ -1,6 +1,13 @@
 #ifndef ARRAY_H
 #define ARRAY_H value
 #define DEFAULT_SIZE 16
+#ifndef NULL
+#define NULL 0
+#endif
+struct _Node{
+	int value;
+	struct _Node *next;
+};
 
 class Iterator;
 class Queue
@@ -13,22 +20,24 @@ public:
 	Iterator createIterator();
 	int get();
 private:
-	int *data;
-	int q_size;
-	int index;
-	int position;
+	struct _Node *_head;
+	struct _Node *_current;
+	struct _Node *_prev;
+	void _initNode();
+	void _appendNode(int val);
+	int _popFirstNode();
 	/* data */
 };
 
 class Iterator
 {
 public:
-	Iterator(Queue & q);
+	Iterator(Queue * q);
 	~Iterator();
 	int next();
 private:
-	Queue _queue;
-	int pos;
+	Queue *_queue;
+	struct _Node *_cur;
 	/* data */
 };
 #endif

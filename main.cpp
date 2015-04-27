@@ -19,7 +19,7 @@ int main(int argc, char const *argv[])
 			break;
 		}
 	}
-	Iterator it2(q);
+	Iterator it2 = q.createIterator();
 	while(true){
 		try{
 			cout << it2.next() << '\t';
